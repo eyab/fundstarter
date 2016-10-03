@@ -1,27 +1,11 @@
-var fs = require('fs') ;
-var http = require('http');
+var http = require('http')
+     var fs = require('fs')
+     var filename = 'index.html'
+    // console.log("App is running on localhost:8080");
+    
+ http.createServer(function(req,response){
+	var buff = fs.readFileSync('index.html', "utf8")
+	response.writeHead(200, {"Content-type":"text/html"})
+	response.write(buff)
+	response.end()}).listen(8080);
 
-var requestListener = function (req, res) {
-    res.writeHead(200);
-
-    fs.stat("index.html", function (err, stats) {
-
-        if (err) {
-            return console.log(err);
-        }
-        fs.open("index.html", 'r', function (err, fd) {
-            if (err) {
-                return console.log(err);
-            }
-            fs.read(fd, new Buffer(stats.size), 0, stats.size, 0, function (err, bytesRead, buffer) {
-                if (err) {
-                    return console.log(err);
-                }
-                res.end(buffer.toString('utf8'));
-            });
-         });
-     });
-}
-
-var server = http.createServer(requestListener);
-server.listen(process.env.PORT || 8080);
